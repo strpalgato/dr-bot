@@ -14,7 +14,7 @@ class Welcome(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = member.guild.system_channel
-        background = Editor("pic2.png")
+        background = Editor("/images/pic2.png")
         profile_pic = await load_image_async(str(member.avatar.url))
         profile = Editor(profile_pic).resize((150, 150)).circle_image()
         poppins = Font.poppins(size=50, variant="bold")

@@ -2,12 +2,19 @@ import discord
 from discord.ext import commands
 from collections import defaultdict
 import asyncio
+import json
+import os
 
 class AntiSpam(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.spam_tracker = defaultdict(list)
         self.mute_time = 240  # Tiempo en segundos para silenciar al usuario
+
+        # Cargar las URLs de gifs desde el archivo JSON
+        with open(os.path.join("data", "media.json"), "r") as f:
+            media_data = json.load(f)
+            self.gifs = media_data.get("gifs", {})
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -35,7 +42,8 @@ class AntiSpam(commands.Cog):
                 channel = message.guild.get_channel(1210343520582508634)
                 # Enviar el mensaje inicial con la cuenta regresiva
                 initial_message = await channel.send(f"{message.author.mention} ha sido silenciado por spam. Volverá <t:{int(timestamp + self.mute_time)}:R>")
-                gif_url = "https://imgur.com/MvKVwR2"
+                # Obtener la URL del gif desde el archivo JSON
+                gif_url = self.gifs.get("gif1")
                 await channel.send(gif_url)
                 # Iniciar temporizador para levantar el silencio después del tiempo especificado
                 await asyncio.sleep(self.mute_time)

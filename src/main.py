@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from config import TOKEN
+from decouple import config
 from typing import Literal
 
 class Client(commands.Bot):
@@ -31,7 +31,5 @@ async def reload(interaction: discord.Interaction, cog:Literal["prefix_commands"
     print(e)
     await interaction.response.send_message(f"Error! no se pudo recargar el módulo. Revisa el error abajo \n```{e}```", ephemeral=True)
 
-client.run(TOKEN)
 
-
-
+client.run(config("TOKEN"))
